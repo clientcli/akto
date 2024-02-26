@@ -100,6 +100,7 @@ public class TestingRunIssuesDao extends AccountsContextDao<TestingRunIssues> {
         pipeline.add(Aggregates.group(groupedId, Accumulators.sum("count", 1)));
 
         Map<String,Integer> result = new HashMap<>();
+        // get from MongoDB
         MongoCursor<BasicDBObject> severitiesCursor = TestingRunIssuesDao.instance.getMCollection().aggregate(pipeline, BasicDBObject.class).cursor();
         while(severitiesCursor.hasNext()) {
             try {
@@ -111,7 +112,7 @@ public class TestingRunIssuesDao extends AccountsContextDao<TestingRunIssues> {
                 e.printStackTrace();
             }
         }
-
+        
         return result;
     }
 

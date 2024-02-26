@@ -483,6 +483,7 @@ public class Utils {
         return payload;
     }
 
+    // calculate Risk Scrore from Severity
     public static float calculateRiskValueForSeverity(String severity){
         float riskScore = 0 ;
         switch (severity) {

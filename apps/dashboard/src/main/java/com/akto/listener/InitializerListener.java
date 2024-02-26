@@ -1616,6 +1616,7 @@ public class InitializerListener implements ServletContextListener {
         }
     }
 
+    // this function imports regex patterns of some senitive information.
     public static void insertPiiSources(){
         if (PIISourceDao.instance.findOne("_id", "A") == null) {
             String fileUrl = "https://raw.githubusercontent.com/akto-api-security/pii-types/master/general.json";
