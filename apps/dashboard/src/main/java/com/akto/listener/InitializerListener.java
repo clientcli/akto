@@ -298,6 +298,7 @@ public class InitializerListener implements ServletContextListener {
         }, 0, 4, TimeUnit.HOURS);
     }
 
+    // don't use anywhere
     static TestCategory findTestCategory(String path, Map<String, TestCategory> shortNameToTestCategory) {
         path = path.replaceAll("-", "").replaceAll("_", "").toLowerCase();
         return shortNameToTestCategory.getOrDefault(path, TestCategory.UC);
