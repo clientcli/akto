@@ -152,9 +152,10 @@ public class Main {
 
     // REFERENCE: https://www.oreilly.com/library/view/kafka-the-definitive/9781491936153/ch04.html (But how do we Exit?)
     public static void main(String[] args) {
-        String mongoURI = System.getenv("AKTO_MONGO_CONN");;
-        String configName = System.getenv("AKTO_CONFIG_NAME");
+        String mongoURI = System.getenv("AKTO_MONGO_CONN");;  // mongodb://mongo:27017/admin
+        String configName = System.getenv("AKTO_CONFIG_NAME"); // staging
         String topicName = System.getenv("AKTO_KAFKA_TOPIC_NAME");
+        
         String kafkaBrokerUrl = "kafka1:19092"; //System.getenv("AKTO_KAFKA_BROKER_URL");
         String groupIdConfig =  System.getenv("AKTO_KAFKA_GROUP_ID_CONFIG");
         String instanceType =  System.getenv("AKTO_INSTANCE_TYPE");
@@ -243,12 +244,16 @@ public class Main {
                         }
 
                         httpResponseParams = HttpCallParser.parseKafkaMessage(r.value());
-                         
+                        /* Params: String type, int statusCode, String status, Map<String, List<String>> headers, String payload,
+                        HttpRequestParams requestParams, int time, String accountId, boolean isPending, Source source, 
+                        String orig, String sourceIP */ 
+                        
                     } catch (Exception e) {
                         loggerMaker.errorAndAddToDb(e, "Error while parsing kafka message " + e, LogDb.RUNTIME);
                         continue;
                     }
                     String accountId = httpResponseParams.getAccountId();
+                    // put (accountid,httpResponseParams) to a map
                     if (!responseParamsToAccountMap.containsKey(accountId)) {
                         responseParamsToAccountMap.put(accountId, new ArrayList<>());
                     }
@@ -257,6 +262,7 @@ public class Main {
 
                 for (String accountId: responseParamsToAccountMap.keySet()) {
                     int accountIdInt;
+                    // check whether account id is string or not
                     try {
                         accountIdInt = Integer.parseInt(accountId);
                     } catch (Exception ignored) {
@@ -271,7 +277,7 @@ public class Main {
                         accountInfo = new AccountInfo();
                         accountInfoMap.put(accountIdInt, accountInfo);
                     }
-
+                    // if last estimated count time is more than 1 hour, then update the estimated count
                     if ((Context.now() - accountInfo.lastEstimatedCountTime) > 60*60) {
                         accountInfo.lastEstimatedCountTime = Context.now();
                         accountInfo.estimatedCount = SingleTypeInfoDao.instance.getMCollection().estimatedDocumentCount();
@@ -279,10 +285,10 @@ public class Main {
                         loggerMaker.infoAndAddToDb("STI Estimated count: " + accountInfo.estimatedCount, LogDb.RUNTIME);
                     }
 
-                    if (!isDashboardInstance && accountInfo.estimatedCount> 20_000_000) {
+                    if (!isDashboardInstance && accountInfo.estimatedCount > 20_000_000) {
                         continue;
                     }
-
+                    // if active endpoint overage detected, then skip the account
                     if (UsageMetricUtils.checkActiveEndpointOverage(accountIdInt)) {
                         int now = Context.now();
                         int lastSent = logSentMap.getOrDefault(accountIdInt, 0);
@@ -293,7 +299,7 @@ public class Main {
                         }
                         continue;
                     }
-
+                    // if account id is not in the map, then create a new parser
                     if (!httpCallParserMap.containsKey(accountId)) {
                         HttpCallParser parser = new HttpCallParser(
                                 apiConfig.getUserIdentifier(), apiConfig.getThreshold(), apiConfig.getSync_threshold_count(),
@@ -302,9 +308,10 @@ public class Main {
 
                         httpCallParserMap.put(accountId, parser);
                     }
-
+                    // get the parser from the map
                     HttpCallParser parser = httpCallParserMap.get(accountId);
 
+                    // parse the response
                     try {
                         List<HttpResponseParams> accWiseResponse = responseParamsToAccountMap.get(accountId);
                         parser.syncFunction(accWiseResponse, syncImmediately, fetchAllSTI, accountInfo.getAccountSettings());
