@@ -26,6 +26,7 @@ public class SampleDataToSTI {
 
     }
 
+    // Single Table Inheritance
     public void setSampleDataToSTI(List<SampleData> allData) {
 
         HttpCallParser parse = new HttpCallParser("", 0, 0, 0, true);
