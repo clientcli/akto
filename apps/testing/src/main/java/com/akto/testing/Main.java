@@ -198,6 +198,8 @@ public class Main {
                 TestingRunResultSummary trrs = findPendingTestingRunResultSummary();
                 TestingRun testingRun;
                 ObjectId summaryId = null;
+
+                // if TestingRunResultSummary (trrs) is null, then we are running a new test
                 if (trrs == null) {
                     testingRun = findPendingTestingRun();
                 } else {
@@ -267,6 +269,7 @@ public class Main {
 
                         }
                     }
+                    // run the test
                     testExecutor.init(testingRun, summaryId);
                     raiseMixpanelEvent(summaryId, testingRun);
                 } catch (Exception e) {

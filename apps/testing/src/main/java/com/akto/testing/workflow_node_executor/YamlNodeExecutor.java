@@ -46,7 +46,8 @@ import com.google.gson.Gson;
 public class YamlNodeExecutor extends NodeExecutor {
     
     private static final Gson gson = new Gson();
-
+     
+    // This method is called from the WorkflowNodeExecutor class
     public NodeResult processNode(Node node, Map<String, Object> varMap, Boolean allowAllStatusCodes, boolean debug, List<TestingRunResult.TestLog> testLogs) {
         List<String> testErrors = new ArrayList<>();
 

@@ -114,7 +114,7 @@ public class Filter {
             DataOperandsFilterResponse resp = isEndpointValid(firstExtractNode, rawApi, testRawApi, apiInfoKey, matchingKeySet, contextEntities, keyValOpSeen,context, varMap, logId, false);
             result = result && resp.getResult();
         }
-
+        // this function return true 
         return new DataOperandsFilterResponse(result, matchingKeySet, contextEntities, firstExtractNode);
 
     }

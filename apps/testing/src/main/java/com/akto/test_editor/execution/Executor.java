@@ -320,7 +320,8 @@ public class Executor {
         return new WorkflowTest(Context.now(), apiInfoKey.getApiCollectionId(), "", Context.now(), "", Context.now(),
                 null, edges, mapNodeIdToWorkflowNodeDetails, WorkflowTest.State.DRAFT);
     }
-
+    
+    // validate the request & response
     public TestResult validate(ExecutionResult attempt, RawApi rawApi, Map<String, Object> varMap, String logId, FilterNode validatorNode, ApiInfo.ApiInfoKey apiInfoKey) {
         if (attempt == null || attempt.getResponse() == null) {
             return null;
@@ -419,6 +420,7 @@ public class Executor {
 
         return null;
     }
+
 
     public ExecutorSingleOperationResp runOperation(String operationType, RawApi rawApi, Object key, Object value, Map<String, Object> varMap, AuthMechanism authMechanism, List<CustomAuthType> customAuthTypes) {
         switch (operationType.toLowerCase()) {

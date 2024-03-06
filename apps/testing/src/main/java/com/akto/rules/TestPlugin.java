@@ -46,7 +46,7 @@ public abstract class TestPlugin {
     private static final Logger logger = LoggerFactory.getLogger(TestPlugin.class);
     private static final Gson gson = new Gson();
 
-    public abstract Result  start(ApiInfoKey apiInfoKey, TestingUtil testingUtil, TestingRunConfig testingRunConfig);
+    public abstract Result start(ApiInfoKey apiInfoKey, TestingUtil testingUtil, TestingRunConfig testingRunConfig);
 
     public abstract String superTestName();
     public abstract String subTestName();
@@ -378,6 +378,8 @@ public abstract class TestPlugin {
         boolean validateResult = validate(validatorNode,rawApi,testRawApi, apiInfoKey,"validator", varMap, logId);
 
         // loggerMaker.infoAndAddToDb(logId + " isDefaultPayload = " + isDefaultPayload + "; validateResult = " + validateResult, LogDb.TESTING);
+        /* return true when it is not default payload and endpoint is --> vulnerable, 
+        others will return false */ 
         return !isDefaultPayload && validateResult;
     }
 
