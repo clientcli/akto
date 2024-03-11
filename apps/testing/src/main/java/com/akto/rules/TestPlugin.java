@@ -108,6 +108,7 @@ public abstract class TestPlugin {
             return 0.0;
         }
 
+        // If both are empty
         if (originalResponseParamMap.keySet().size() == 0 && currentResponseParamMap.keySet().size() == 0) {
             return 100.0;
         }
@@ -374,11 +375,12 @@ public abstract class TestPlugin {
 
         OriginalHttpResponse response = testRawApi.getResponse();
         String body = response == null ? null : response.getBody();
+        // check whether response body is default payload or not
         boolean isDefaultPayload = StatusCodeAnalyser.isDefaultPayload(body);
         boolean validateResult = validate(validatorNode,rawApi,testRawApi, apiInfoKey,"validator", varMap, logId);
 
         // loggerMaker.infoAndAddToDb(logId + " isDefaultPayload = " + isDefaultPayload + "; validateResult = " + validateResult, LogDb.TESTING);
-        /* return true when it is not default payload and endpoint is --> vulnerable, 
+        /* return true when it is not default payload and endpoint is valid --> vulnerable, 
         others will return false */ 
         return !isDefaultPayload && validateResult;
     }

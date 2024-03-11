@@ -28,13 +28,17 @@ public class Filter {
         this.filterAction = new FilterAction();
     }
     
+    // This function is used to check if the endpoint is valid or not based on Data Operands ??????????
     public DataOperandsFilterResponse isEndpointValid(FilterNode node, RawApi rawApi, RawApi testRawApi, ApiInfo.ApiInfoKey apiInfoKey, List<String> matchingKeySet, List<BasicDBObject> contextEntities, boolean keyValOperandSeen, String context, Map<String, Object> varMap, String logId, boolean skipExtractExecution) {
 
         List<FilterNode> childNodes = node.getChildNodes();
+        // check if the node is a leaf node (representing a terminal or a collection operand)
         if (node.getNodeType().equalsIgnoreCase(OperandTypes.Term.toString()) || node.getNodeType().equalsIgnoreCase(OperandTypes.Collection.toString())) {
             matchingKeySet = null;
         }
+        // if it is the original node
         if (childNodes.size() == 0) {
+            // If the node has no child nodes, it performs specific action as a greater comparison operator 
             if (node.getOperand().equalsIgnoreCase(TestEditorEnums.PredicateOperator.COMPARE_GREATER.toString())) {
                 Object updatedQuerySet = filterAction.resolveQuerySetValues(null, node.fetchNodeValues(), varMap);
                 List<Object> val = (List<Object>) updatedQuerySet;
@@ -42,6 +46,7 @@ public class Filter {
                 Boolean res = filterAction.invokeFilter(dataOperandFilterRequest);
                 return new DataOperandsFilterResponse(res, matchingKeySet, contextEntities, null);
             }
+            // if the node does not handle any operand type like comparison operators, data extraction, and context evaluation, it returns false
             if (! (node.getNodeType().toLowerCase().equals(OperandTypes.Data.toString().toLowerCase()) || node.getNodeType().toLowerCase().equals(OperandTypes.Extract.toString().toLowerCase()) || node.getNodeType().toLowerCase().equals(OperandTypes.Context.toString().toLowerCase() ))) {
                 return new DataOperandsFilterResponse(false, null, null, null);
             }

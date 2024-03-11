@@ -233,6 +233,7 @@ public class Main {
                     try {
                          
                         printL(r.value());
+                        // System.out.println(r.value());
                         lastSyncOffset++;
 
                         if (lastSyncOffset % 100 == 0) {

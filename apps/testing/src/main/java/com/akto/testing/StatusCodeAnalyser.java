@@ -106,6 +106,7 @@ public class StatusCodeAnalyser {
         defaultPayloadsMap.put(hash, count+1);
     }
 
+    // if payload is same for more than 5 times in the defaultPayloadsMap then it is default payload
     public static boolean isDefaultPayload(String payload) {
         if (payload == null) return true;
         int hash = payload.hashCode();

@@ -186,6 +186,7 @@ public class Main {
 
         setupRateLimitWatcher();
 
+        // logs saw in akto-akto-api-security-testing-1 docker container
         loggerMaker.infoAndAddToDb("Starting.......", LogDb.TESTING);
 
         Map<Integer, Integer> logSentMap = new HashMap<>();
