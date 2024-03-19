@@ -49,7 +49,7 @@ Click on the Signup button to get started for the first time. If the account hav
 
 Example API
 
-```
+  ```
     POST https://xyz.abc.com/api/v1/users?userId=500&creationFlow=true
     Request Payload
 
@@ -86,10 +86,10 @@ Example API
         server: "uvicorn"
         access-control-allow-credentials: "true"
         content-type: "application/json"
-```
+  ```
 
-- The reponse data will be categorized based on `accountId`
-- Perform parsing data
+- The response data will be categorized based on `accountId`
+- Perform parsing data using function `parseKafkaMessage`
     - HttpRequestParams
 
     ```
@@ -131,6 +131,7 @@ Example API
 
 ### 3.2. Testing module
 - Main task: Write custom tests and run to find vulnerabilities in APIs.
+- YAML Test: defines a set of instructions for testing APIs to find security vulnerabilities. Akto provides more than 100 test cases in [here](https://github.com/akto-api-security/tests-library/tree/master)
 - Write a custom test
     ```
     id: Vulnerable_Test
@@ -148,17 +149,17 @@ Example API
     tags: ""                           # provides descriptive labels or keywords associated with the test
     references: ""                     # contains a list of relevant resources, documentation, or external links related to the test
     auth:
-    authenticated: true               # makes sure that only authentiated api's get considered for a test.
+    authenticated: true                # makes sure that only authentiated api's get considered for a test.
     api_selection_filters:  
-    response_code:                    # Filters API calls that return a response code between 200 and 300 (inclusive).      
+    response_code:                     # Filters API calls that return a response code between 200 and 300 (inclusive).      
         gte: 200                        
         lte: 300 
     url:       
-        contains_all:                   # Filters API calls that contain the word "user" in the URL.
+        contains_all:                  # Filters API calls that contain the word "user" in the URL.
         - user
-        extract: urlVar                 # extracts the url value into a variable named urlVar
+        extract: urlVar                # extracts the url value into a variable named urlVar
     method:    
-        contains_either:                # Filters API calls that use either the POST, PATCH, or PUT HTTP methods
+        contains_either:               # Filters API calls that use either the POST, PATCH, or PUT HTTP methods
         - POST
         - PATCH
         - PUT
