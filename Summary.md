@@ -39,7 +39,7 @@ $ docker-compose up -d
 
 Then, all services are running as
 
-<img src="/images/docker-compose-up.png" alt="docker-compose-up" width="800"/>
+<img src="/images/docker-compose-up.png" alt="docker-compose-up" width="600"/>
 
 You should open the dashboard at http://localhost:9090. If we want to access from the outside as other computer, please make sure this port was opened for all IP. In that case, we need to change ``localhost`` to the IP of deployment place.
 
