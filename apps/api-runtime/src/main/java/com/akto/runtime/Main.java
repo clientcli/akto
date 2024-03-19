@@ -153,6 +153,7 @@ public class Main {
     // REFERENCE: https://www.oreilly.com/library/view/kafka-the-definitive/9781491936153/ch04.html (But how do we Exit?)
     public static void main(String[] args) {
         String mongoURI = System.getenv("AKTO_MONGO_CONN");;  // mongodb://mongo:27017/admin
+//        String mongoURI = "mongodb://mongo:27017/admin";
         String configName = System.getenv("AKTO_CONFIG_NAME"); // staging
         String topicName = System.getenv("AKTO_KAFKA_TOPIC_NAME");
         
@@ -168,10 +169,10 @@ public class Main {
             syncImmediately = true;
             fetchAllSTI = false;
         }
-        int maxPollRecordsConfig = Integer.parseInt(System.getenv("AKTO_KAFKA_MAX_POLL_RECORDS_CONFIG"));
-
+//        int maxPollRecordsConfig = Integer.parseInt(System.getenv("AKTO_KAFKA_MAX_POLL_RECORDS_CONFIG"));
+        int maxPollRecordsConfig = 1000;
         if (topicName == null) topicName = "akto.api.logs";
-
+//        System.out.println("mongoURI: " + mongoURI);
         DaoInit.init(new ConnectionString(mongoURI));
         initializeRuntime();
 
@@ -194,6 +195,7 @@ public class Main {
         }
 
         final Main main = new Main();
+        System.out.println("kafkaBrokerUrl, groupIdConfig, maxPollRecordsConfig: " + kafkaBrokerUrl + groupIdConfig+ maxPollRecordsConfig);
         Properties properties = main.configProperties(kafkaBrokerUrl, groupIdConfig, maxPollRecordsConfig);
         main.consumer = new KafkaConsumer<>(properties);
 

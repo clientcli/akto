@@ -167,6 +167,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         String mongoURI = System.getenv("AKTO_MONGO_CONN");;
+        System.out.println("mongoURI: " + mongoURI);
         DaoInit.init(new ConnectionString(mongoURI));
 
         boolean connectedToMongo = false;
@@ -195,12 +196,13 @@ public class Main {
             AccountTask.instance.executeTask(account -> {
 
                 int start = Context.now();
+                System.out.println("Starting time: "+ start);
 
                 TestingRunResultSummary trrs = findPendingTestingRunResultSummary();
                 TestingRun testingRun;
                 ObjectId summaryId = null;
 
-                // if TestingRunResultSummary (trrs) is null, then we are running a new test
+                // To active Testing module, we need to get Pending Testing Run. Otherwise, it will not be run
                 if (trrs == null) {
                     testingRun = findPendingTestingRun();
                 } else {

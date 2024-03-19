@@ -132,14 +132,14 @@ public class TestExecutor {
 
         List<ApiInfo.ApiInfoKey> apiInfoKeyList = testingEndpoints.returnApis();
         if (apiInfoKeyList == null || apiInfoKeyList.isEmpty()) return;
-        loggerMaker.infoAndAddToDb("APIs found: " + apiInfoKeyList.size(), LogDb.TESTING);
+        loggerMaker.infoAndAddToDb("APIs found: " + apiInfoKeyList.size(), LogDb.TESTING); // APIs found: 19
 
         sampleMessageStore.buildSingleTypeInfoMap(testingEndpoints);
         List<TestRoles> testRoles = sampleMessageStore.fetchTestRoles();
         AuthMechanism authMechanism = authMechanismStore.getAuthMechanism();
 
         Map<String, TestConfig> testConfigMap = YamlTemplateDao.instance.fetchTestConfigMap(false, false);
-
+        loggerMaker.infoAndAddToDb("testConfigMap: " + testConfigMap.toString());
         List<CustomAuthType> customAuthTypes = CustomAuthTypeDao.instance.findAll(CustomAuthType.ACTIVE,true);
         TestingUtil testingUtil = new TestingUtil(authMechanism, sampleMessageStore, testRoles, testingRun.getUserEmail(), customAuthTypes);
 
@@ -344,7 +344,7 @@ public class TestExecutor {
         LoginFlowResponse loginFlowResponse = null;
         for (int i=0; i<retries; i++) {
             try {
-                loginFlowResponse = executeLoginFlow(authMechanism, null);
+                loginFlowResponse = executeLoginFlow(authMechanism, null); // invalid auth type for login flow execution
                 if (loginFlowResponse.getSuccess()) {
                     loggerMaker.infoAndAddToDb("login flow success", LogDb.TESTING);
                     break;
@@ -610,7 +610,7 @@ public class TestExecutor {
 
     public TestingRunResult runTestNew(ApiInfo.ApiInfoKey apiInfoKey, ObjectId testRunId, TestingUtil testingUtil,
                                        ObjectId testRunResultSummaryId, TestConfig testConfig, TestingRunConfig testingRunConfig, boolean debug, List<TestingRunResult.TestLog> testLogs) {
-
+        // Retrieve testConfig parameter
         String testSuperType = testConfig.getInfo().getCategory().getName();
         String testSubType = testConfig.getInfo().getSubCategory();
 
@@ -639,6 +639,7 @@ public class TestExecutor {
 
         FilterNode filterNode = testConfig.getApiSelectionFilters().getNode();
         FilterNode validatorNode = null;
+        System.out.println("testConfig.getValidation(): " + testConfig.getValidation().toString());
         if (testConfig.getValidation() != null) {
             validatorNode = testConfig.getValidation().getNode();
         }
