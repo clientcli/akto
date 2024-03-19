@@ -39,7 +39,7 @@ $ docker-compose up -d
 
 Then, all services are running as
 
-<img src="/images/docker-compose-up.png" alt="docker-compose-up" width="600"/>
+<img src="/images/docker-compose-up.png" alt="docker-compose-up" width="500"/>
 
 You should open the dashboard at http://localhost:9090. If we want to access from the outside as other computer, please make sure this port was opened for all IP. In that case, we need to change ``localhost`` to the IP of deployment place.
 
@@ -251,7 +251,42 @@ Example API
   ```
 
 - Code Findings:
+    - Main function: ``` $apps/testing/src/main/java/com/akto/testing/Main.java ```
+    - Note: This function also check vulnerabilities when still have `PendingTestingRun`
+    - Vulnerability detection:
+    ```
+    public TestResult validate(ExecutionResult attempt, RawApi rawApi, Map<String, Object> varMap, String logId, FilterNode validatorNode, ApiInfo.ApiInfoKey apiInfoKey) {
+        if (attempt == null || attempt.getResponse() == null) {
+            return null;
+        }
 
+        String msg = RedactSampleData.convertOriginalReqRespToString(attempt.getRequest(), attempt.getResponse());
+        RawApi testRawApi = new RawApi(attempt.getRequest(), attempt.getResponse(), msg);
+        boolean vulnerable = TestPlugin.validateValidator(validatorNode, rawApi, testRawApi , apiInfoKey, varMap, logId);
+        if (vulnerable) {
+            loggerMaker.infoAndAddToDb("found vulnerable " + logId, LogDb.TESTING);
+        }
+        double percentageMatch = 0;
+        if (rawApi.getResponse() != null && testRawApi.getResponse() != null) {
+            percentageMatch = TestPlugin.compareWithOriginalResponse(
+                rawApi.getResponse().getBody(), testRawApi.getResponse().getBody(), new HashMap<>()
+            );
+        }
+        TestResult testResult = new TestResult(
+                msg, rawApi.getOriginalMessage(), new ArrayList<>(), percentageMatch, vulnerable, TestResult.Confidence.HIGH, null
+        );
+
+        return testResult;
+    }
+    ```
+    - Explanation: 
+      - Input parameters:
+        - `ExecutionResult attempt`: Represents the result of an API execution attempt.
+        - `RawApi rawApi`: Contains the raw API data.
+        - `Map<String, Object> varMap`: A map containing various variables.
+        - `String logId`: A unique identifier for logging purposes.
+        - `FilterNode validatorNode`: Represents a node for filtering data.
+        - `ApiInfo.ApiInfoKey apiInfoKey`: Represents a key for API information.
 
 
 
