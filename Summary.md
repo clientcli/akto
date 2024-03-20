@@ -293,11 +293,37 @@ Example API
 
 - The open source not only provides built-in data types but also allows to create custom data types
 - Some of data types belong to the sensitive data, we can set the sensitivity of data
-- `insertPiiSources()` function help import regex patterns of data sources (3 PII types).
-  - [General information](https://raw.githubusercontent.com/akto-api-security/pii-types/master/general.json)
-  - [Fintech information](https://raw.githubusercontent.com/akto-api-security/akto/master/pii-types/fintech.json)
-  - [File data](https://raw.githubusercontent.com/akto-api-security/akto/master/pii-types/filetypes.json)
-- 
+- Code Findings:
+  - `insertPiiSources()` function help import regex patterns of data sources (3 PII types).
+    - [General information](https://raw.githubusercontent.com/akto-api-security/pii-types/master/general.json)
+    - [Fintech information](https://raw.githubusercontent.com/akto-api-security/akto/master/pii-types/fintech.json)
+    - [File data](https://raw.githubusercontent.com/akto-api-security/akto/master/pii-types/filetypes.json)
+  - 'sensitiveSubTypeInRequestNames' & 'sensitiveSubTypeInResponseNames'
+![data-type-example](/images/dashboard-datatypes.png)
+
+- Risk Score Calculation: is calculated based on the amount of sensitive information the API shares and its current status regarding security issues
+  ```
+  public static float calculateRiskValueForSeverity(String severity){
+    float riskScore = 0 ;
+    switch (severity) {
+        case "HIGH":
+            riskScore += 100;
+            break;
+
+        case "MEDIUM":
+            riskScore += 10;
+            break;
+
+        case "LOW":
+            riskScore += 1;
+        
+        default:
+            break;
+    }
+
+    return riskScore;
+  }
+  ```
 
 
 
