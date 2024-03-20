@@ -280,13 +280,24 @@ Example API
     }
     ```
     - Explanation: 
-      - Input parameters:
-        - `ExecutionResult attempt`: Represents the result of an API execution attempt.
-        - `RawApi rawApi`: Contains the raw API data.
-        - `Map<String, Object> varMap`: A map containing various variables.
-        - `String logId`: A unique identifier for logging purposes.
-        - `FilterNode validatorNode`: Represents a node for filtering data.
-        - `ApiInfo.ApiInfoKey apiInfoKey`: Represents a key for API information.
+      - `validateValidator()`: validate a test API response against a set of validation rules or criteria and returns be vulnerable if the response is not a default payload and if it passes the selection filters , and no vulnerability otherwise.
+        - If payload is same for more than 5 times in the `defaultPayloadsMap` then it is default payload
+        - `isEndpointValid()` function is used to check the valid of endpoint based on many filters that is recognized based on operators / operands
+      - `compareWithOriginalResponse()`: Calculate the match percentage between the original & validate response payload.
+        - If both are null => 100% matching
+        - If one of them is null => 0%
+        - Convert to strings without white space & compare: If 2 strings are equal => 100% match
+        - Extract param map from payload. Then the **matchedValue** will be increase 1 whenever each parameter are similar in both response => match(%) = (100.0*matchedValue)/responseSize
+
+### 3.3. Sensitive data & Risk score
+
+- The open source not only provides built-in data types but also allows to create custom data types
+- Some of data types belong to the sensitive data, we can set the sensitivity of data
+- `insertPiiSources()` function help import regex patterns of data sources (3 PII types).
+  - [General information](https://raw.githubusercontent.com/akto-api-security/pii-types/master/general.json)
+  - [Fintech information](https://raw.githubusercontent.com/akto-api-security/akto/master/pii-types/fintech.json)
+  - [File data](https://raw.githubusercontent.com/akto-api-security/akto/master/pii-types/filetypes.json)
+- 
 
 
 
