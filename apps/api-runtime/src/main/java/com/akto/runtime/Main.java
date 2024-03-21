@@ -297,6 +297,7 @@ public class Main {
                         int lastSent = logSentMap.getOrDefault(accountIdInt, 0);
                         if (now - lastSent > LoggerMaker.LOG_SAVE_INTERVAL) {
                             logSentMap.put(accountIdInt, now);
+                            // put the log to the db
                             loggerMaker.infoAndAddToDb("Active endpoint overage detected for account " + accountIdInt
                                     + ". Ingestion stopped " + now, LogDb.RUNTIME);
                         }

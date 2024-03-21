@@ -12,7 +12,7 @@ import com.mongodb.client.model.Indexes;
 
 import org.bson.Document;
 
-public class RuntimeLogsDao extends AccountsContextDao<Log> {
+public class  RuntimeLogsDao extends AccountsContextDao<Log> {
 
     public static final RuntimeLogsDao instance = new RuntimeLogsDao();
     public void createIndicesIfAbsent() {
