@@ -255,6 +255,7 @@ public class Main {
                         loggerMaker.errorAndAddToDb(e, "Error while parsing kafka message " + e, LogDb.RUNTIME);
                         continue;
                     }
+                    // accountId is 1_000_000 by default
                     String accountId = httpResponseParams.getAccountId();
                     // put (accountid,httpResponseParams) to a map
                     if (!responseParamsToAccountMap.containsKey(accountId)) {
@@ -297,7 +298,6 @@ public class Main {
                         int lastSent = logSentMap.getOrDefault(accountIdInt, 0);
                         if (now - lastSent > LoggerMaker.LOG_SAVE_INTERVAL) {
                             logSentMap.put(accountIdInt, now);
-                            // put the log to the db
                             loggerMaker.infoAndAddToDb("Active endpoint overage detected for account " + accountIdInt
                                     + ". Ingestion stopped " + now, LogDb.RUNTIME);
                         }

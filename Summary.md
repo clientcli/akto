@@ -10,8 +10,7 @@
 
 - Extensions
     - **Runtime analyzer** (Enterprise only): consumes all the traffic from ***Kafka*** to find out endpoints, auth policies, changes in APIs and populates them in the ***Mongo*** database.
-    - **
-    - ** (Enterprise only): consumes data from ***Kafka*** for ML perspective to reduce false positives (FP) in test results. Then, context inferrence will be saved in ***Mongo***.
+    - **Context analyzer** (Enterprise only): consumes data from ***Kafka*** for ML perspective to reduce false positives (FP) in test results. Then, context inferrence will be saved in ***Mongo***.
     - **Traffic mirroring module**: assemble packets in an order and extract HTTP req-resp pairs from the stream. Then push to ***Kafka***.
 
 - Container service's information
