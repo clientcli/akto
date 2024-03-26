@@ -43,6 +43,7 @@ public class HttpResponseParams {
         this.sourceIP = sourceIP;
     }
 
+    // return true when the status code must be both greater than or equal to 200 and either less than 300 or equal to 302.
     public static boolean validHttpResponseCode(int statusCode)  {
         return statusCode >= 200 && (statusCode < 300 || statusCode == 302);
     }

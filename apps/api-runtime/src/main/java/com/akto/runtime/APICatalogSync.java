@@ -510,7 +510,7 @@ public class APICatalogSync {
                         } 
                         similarTemplates.add(dbTemplate);
                         countSimilarURLs++;
-                     }
+                    }
                 }
                      
                 if (countSimilarURLs >= STRING_MERGING_THRESHOLD) {

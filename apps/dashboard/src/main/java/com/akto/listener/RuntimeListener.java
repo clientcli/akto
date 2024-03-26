@@ -342,6 +342,8 @@ public class RuntimeListener extends AfterMongoConnectListener {
             ApiInfo.ApiInfoKey apiInfoKey = new ApiInfo.ApiInfoKey(collection.getId(), path, URLMethods.Method.fromString(method));
             vulnerableRequestForTemplates.add(new VulnerableRequestForTemplate(apiInfoKey, templates));
         }
+
+        // insert vulnerable requests for templates
         VulnerableRequestForTemplateDao.instance.insertMany(vulnerableRequestForTemplates);
     }
 

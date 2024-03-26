@@ -61,13 +61,16 @@ public class Main {
             Map<String, Object> json = gson.fromJson(message, Map.class);
 
             // logger.info("Json size: " + json.size());
+            // Classless Inter-Domain Routing (CIDR) allows network routers to route data packets to the respective device based on the indicated subnet
             boolean withoutCidrCond = json.containsKey(GROUP_NAME) && json.containsKey(VXLAN_ID);
             boolean withCidrCond = json.containsKey(GROUP_NAME) && json.containsKey(VXLAN_ID) && json.containsKey(VPC_CIDR);
             if (withCidrCond || withoutCidrCond) {
                 ret = true;
                 String groupName = (String) (json.get(GROUP_NAME));
+                // Virtual Extensible LAN (VXLAN) is a network virtualization technology that attempts to address the scalability problems associated with large cloud computing deployments
                 String vxlanIdStr = ((Double) json.get(VXLAN_ID)).intValue() + "";
                 int vxlanId = Integer.parseInt(vxlanIdStr);
+                // update groupName in database based on vxlanId
                 ApiCollectionsDao.instance.getMCollection().updateMany(
                         Filters.eq(ApiCollection.VXLAN_ID, vxlanId),
                         Updates.set(ApiCollection.NAME, groupName)
@@ -173,7 +176,9 @@ public class Main {
         int maxPollRecordsConfig = 1000;
         if (topicName == null) topicName = "akto.api.logs";
 //        System.out.println("mongoURI: " + mongoURI);
+        // connect to mongo
         DaoInit.init(new ConnectionString(mongoURI));
+        // setup apicollectionid in database
         initializeRuntime();
 
         String centralKafkaTopicName = AccountSettings.DEFAULT_CENTRAL_KAFKA_TOPIC_NAME;
@@ -189,6 +194,7 @@ public class Main {
 
 
         APIConfig apiConfig;
+        // get the api config from the database based on the config name
         apiConfig = APIConfigsDao.instance.findOne(Filters.eq("name", configName));
         if (apiConfig == null) {
             apiConfig = new APIConfig(configName,"access-token", 1, 10_000_000, sync_threshold_time); // this sync threshold time is used for deleting sample data
@@ -356,6 +362,7 @@ public class Main {
     }
 
     public static void initializeRuntimeHelper() {
+        // update apiColelctionId for all singleTypeInfos
         SingleTypeInfoDao.instance.getMCollection().updateMany(Filters.exists("apiCollectionId", false), Updates.set("apiCollectionId", 0));
         createIndices();
         insertRuntimeFilters();
@@ -371,6 +378,7 @@ public class Main {
             for(SingleTypeInfo singleTypeInfo: SingleTypeInfoDao.instance.fetchAll()) {
                 urls.add(singleTypeInfo.getUrl());
             }
+            // create a new api collection
             ApiCollectionsDao.instance.insertOne(new ApiCollection(0, "Default", Context.now(), urls, null, 0, false, true));
         }
     }
