@@ -95,7 +95,7 @@ public class Main {
         return ret;
     }
 
-
+    // create indices for all the collections in Mongodb
     public static void createIndices() {
         SingleTypeInfoDao.instance.createIndicesIfAbsent();
         SensitiveSampleDataDao.instance.createIndicesIfAbsent();
