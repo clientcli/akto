@@ -179,6 +179,7 @@ public class SingleTypeInfoDao extends AccountsContextDao<SingleTypeInfo> {
         return sensitiveInResponse;
     }
 
+    // function constructs a filter for sensitive parameters excluding user marked sensitive parameters
     public Bson filterForSensitiveParamsExcludingUserMarkedSensitive(Integer apiCollectionId, String url, String method, String subType) {
         // apiCollectionId null then no filter for apiCollectionId
         List<String> sensitiveSubTypes = sensitiveSubTypeNames();
